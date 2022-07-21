@@ -1,22 +1,21 @@
 const Author = require('../models/Author');
 
-const getAuthors = async(req, res) => {
+const getAuthors = async (req, res) => {
     try {
         const authors = await Author.find();
         res.send(authors);
     } catch (error) {
-        res.send('error while geting users');
+        res.send('error while geting authors');
     }
 }
 
 const createAuthor = (req, res) => {
     console.log('body', req.body);
-    const user = new Author(req.body);
+    const author = new Author(req.body);
 
     console.log(`Trying to save author with name ${author.firstName} to database!`);
     author.save()
         .then(() => {
-            // users.push({ ...user, id: uuidv4() });
             res.send(`Author with name ${author.firstName} added to database!`);
         })
         .catch(err => {
@@ -24,7 +23,7 @@ const createAuthor = (req, res) => {
         });
 }
 
-const getAuthor = async(req, res) => {
+const getAuthor = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -35,26 +34,26 @@ const getAuthor = async(req, res) => {
     }
 }
 
-const deleteAuthor = async(req, res) => {
+const deleteAuthor = async (req, res) => {
     const { id } = req.params;
 
     try {
         await Author.deleteOne({ _id: id });
         res.send(`Author with id ${id} deleted from database!`);
     } catch (error) {
-        res.send(`Error while deleting  with id ${id}`);
+        res.send(`Error while deleting author with id ${id}`);
     }
 }
 
-const updateAuthorDes = async(req, res) => {
+const updateAuthorDes = async (req, res) => {
     const { id } = req.params;
     const { description } = req.body;
 
     try {
-        const updatedAuthor = await Author.updateOne({ _id: id }, { $set: { description: description } });
+        const updatedAuthor = await Author.updateOne({ _id: id }, { $set: { description } });
         res.send(updatedAuthor);
     } catch (error) {
-        res.send(`Error while updating  with id ${id}`);
+        res.send(`Error while updating author with id ${id}`);
     }
 }
 

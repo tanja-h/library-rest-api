@@ -30,4 +30,3 @@ mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true })
 
 //listen to server
 app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));
-//nevena

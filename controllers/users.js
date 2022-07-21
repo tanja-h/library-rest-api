@@ -16,7 +16,6 @@ const createUser = (req, res) => {
     console.log(`Trying to save user with name ${user.firstName} to database!`);
     user.save()
         .then(() => {
-            // users.push({ ...user, id: uuidv4() });
             res.send(`User with name ${user.firstName} added to database!`);
         })
         .catch(err => {
