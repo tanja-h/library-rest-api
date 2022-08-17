@@ -38,10 +38,10 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     try {
-        await User.remove({ _id: id });
+        await User.deleteOne({ _id: id });
         res.send(`User with id ${id} deleted from database!`);
     } catch (error) {
-        res.send(`Error while deleting  with id ${id}`);
+        res.send(`Error while deleting user with id ${id}`);
     }
 }
 

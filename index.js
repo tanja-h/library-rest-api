@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const usersRoutes = require('./routes/users.js');
 const authorsRoutes = require('./routes/authors.js');
 const awardsRoutes = require('./routes/awards.js');
+const catalogsRoutes = require('./routes/catalogs.js');
 require('dotenv/config');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use('/users', usersRoutes);
 app.use('/authors', authorsRoutes);
 app.use('/awards', awardsRoutes);
+app.use('/catalogs', catalogsRoutes);
 
 //ROUTES
 app.get('/', (req, res) => {
