@@ -1,6 +1,6 @@
-const Award = require('../models/Award');
+const { Award } = require('../models/Award');
 
-const getAwards = async (req, res) => {
+const getAwards = async(req, res) => {
     try {
         const awards = await Award.find();
         res.send(awards);
@@ -24,7 +24,7 @@ const createAward = (req, res) => {
         });
 }
 
-const getAward = async (req, res) => {
+const getAward = async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -35,7 +35,7 @@ const getAward = async (req, res) => {
     }
 }
 
-const deleteAward = async (req, res) => {
+const deleteAward = async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -46,7 +46,7 @@ const deleteAward = async (req, res) => {
     }
 }
 
-const updateAwardDes = async (req, res) => {
+const updateAwardDes = async(req, res) => {
     const { id } = req.params;
     const { description } = req.body;
 

@@ -1,6 +1,6 @@
-const Author = require('../models/Author');
+const { Author } = require('../models/Author');
 
-const getAuthors = async (req, res) => {
+const getAuthors = async(req, res) => {
     try {
         const authors = await Author.find();
         res.send(authors);
@@ -23,7 +23,7 @@ const createAuthor = (req, res) => {
         });
 }
 
-const getAuthor = async (req, res) => {
+const getAuthor = async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -34,7 +34,7 @@ const getAuthor = async (req, res) => {
     }
 }
 
-const deleteAuthor = async (req, res) => {
+const deleteAuthor = async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -45,7 +45,7 @@ const deleteAuthor = async (req, res) => {
     }
 }
 
-const updateAuthorDes = async (req, res) => {
+const updateAuthorDes = async(req, res) => {
     const { id } = req.params;
     const { description } = req.body;
 
