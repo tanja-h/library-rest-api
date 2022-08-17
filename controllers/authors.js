@@ -13,10 +13,10 @@ const createAuthor = (req, res) => {
     console.log('body', req.body);
     const author = new Author(req.body);
 
-    console.log(`Trying to save author with name ${author.firstName} to database!`);
+    console.log(`Trying to save author with name ${author.firstName} ${author.lastName} to database!`);
     author.save()
         .then(() => {
-            res.send(`Author with name ${author.firstName} added to database!`);
+            res.send(`Author with name ${author.firstName} ${author.lastName} added to database!`);
         })
         .catch(err => {
             res.send(`Error adding new author: ${err} `)
