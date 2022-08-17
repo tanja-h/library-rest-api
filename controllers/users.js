@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const { registerValidation } = require('../validation.js');
 
 const getUsers = async (req, res) => {
     try {
@@ -9,8 +10,13 @@ const getUsers = async (req, res) => {
     }
 }
 
-const createUser = (req, res) => {
+const registerUser = (req, res) => {
     console.log('body', req.body);
+
+    const { error } = registerValidation(req.body);
+
+    if (error) return res.status(400).send(error.details[0].message);
+
     const user = new User(req.body);
 
     console.log(`Trying to save user with name ${user.firstName} to database!`);
@@ -19,7 +25,7 @@ const createUser = (req, res) => {
             res.send(`User with name ${user.firstName} added to database!`);
         })
         .catch(err => {
-            res.send(`Error adding new user: ${err} `)
+            res.status(400).send(`Error adding new user: ${err} `)
         });
 }
 
@@ -57,4 +63,4 @@ const updateUserAge = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, createUser, getUser, deleteUser, updateUserAge }
+module.exports = { getUsers, registerUser, getUser, deleteUser, updateUserAge }
