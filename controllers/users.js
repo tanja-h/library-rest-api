@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { registerValidation } = require('../validation.js');
+const { registerValidation, loginValidation } = require('../validation.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -43,6 +43,24 @@ const registerUser = async (req, res) => {
         });
 }
 
+const loginUser = async (req, res) => {
+    const userBody = req.body;
+    console.log('body', userBody);
+
+    const { error } = loginValidation(userBody);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const user = await User.findOne({ email: userBody.email });
+    if (!user) return res.status(400).send('Wrong email!');
+
+    const isPasswordValid = await bcrypt.compare(userBody.password, user.password);
+    if (!isPasswordValid) return res.status(400).send('Wrong password!');
+
+
+    res.send(`User logged in!`);
+
+}
+
 const getUser = async (req, res) => {
     const { id } = req.params;
 
@@ -77,4 +95,4 @@ const updateUserAge = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, registerUser, getUser, deleteUser, updateUserAge }
+module.exports = { getUsers, registerUser, loginUser, getUser, deleteUser, updateUserAge }
