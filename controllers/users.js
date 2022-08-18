@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const { registerValidation } = require('../validation.js');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const getUsers = async (req, res) => {
     try {
@@ -11,16 +13,25 @@ const getUsers = async (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-    console.log('body', req.body);
+    const userBody = req.body;
+    console.log('body', userBody);
 
-    const { error } = registerValidation(req.body);
+    const { error } = registerValidation(userBody);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const user = new User(req.body);
-
-    const emailExists = await User.findOne({ email: user.email });
+    const emailExists = await User.findOne({ email: userBody.email });
     if (emailExists) return res.status(400).send('Someone already registered with this email!');
 
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(userBody.password, salt);
+
+    const user = new User({
+        firstName: userBody.firstName,
+        lastName: userBody.lastName,
+        age: userBody.age,
+        email: userBody.email,
+        password: hashedPassword,
+    });
 
     console.log(`Trying to save user with name ${user.firstName} to database!`);
     user.save()
