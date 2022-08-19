@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const { registerValidation, loginValidation } = require('../validation.js');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const getUsers = async (req, res) => {
     try {
@@ -9,9 +12,26 @@ const getUsers = async (req, res) => {
     }
 }
 
-const createUser = (req, res) => {
-    console.log('body', req.body);
-    const user = new User(req.body);
+const registerUser = async (req, res) => {
+    const userBody = req.body;
+    console.log('body', userBody);
+
+    const { error } = registerValidation(userBody);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const emailExists = await User.findOne({ email: userBody.email });
+    if (emailExists) return res.status(400).send('Someone already registered with this email!');
+
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(userBody.password, salt);
+
+    const user = new User({
+        firstName: userBody.firstName,
+        lastName: userBody.lastName,
+        age: userBody.age,
+        email: userBody.email,
+        password: hashedPassword,
+    });
 
     console.log(`Trying to save user with name ${user.firstName} to database!`);
     user.save()
@@ -19,8 +39,26 @@ const createUser = (req, res) => {
             res.send(`User with name ${user.firstName} added to database!`);
         })
         .catch(err => {
-            res.send(`Error adding new user: ${err} `)
+            res.status(400).send(`Error adding new user: ${err} `)
         });
+}
+
+const loginUser = async (req, res) => {
+    const userBody = req.body;
+    console.log('body', userBody);
+
+    const { error } = loginValidation(userBody);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const user = await User.findOne({ email: userBody.email });
+    if (!user) return res.status(400).send('Wrong email!');
+
+    const isPasswordValid = await bcrypt.compare(userBody.password, user.password);
+    if (!isPasswordValid) return res.status(400).send('Wrong password!');
+
+
+    res.send(`User logged in!`);
+
 }
 
 const getUser = async (req, res) => {
@@ -57,4 +95,4 @@ const updateUserAge = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, createUser, getUser, deleteUser, updateUserAge }
+module.exports = { getUsers, registerUser, loginUser, getUser, deleteUser, updateUserAge }
