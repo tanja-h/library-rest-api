@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { registerValidation, loginValidation } = require('../validation.js');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -56,8 +57,8 @@ const loginUser = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(userBody.password, user.password);
     if (!isPasswordValid) return res.status(400).send('Wrong password!');
 
-
-    res.send(`User logged in!`);
+    const token = jwt.sign({ _id: user.id }, process.env.TOKEN_SECRET);
+    res.header('auth-token', token).send(token);
 
 }
 
