@@ -4,6 +4,7 @@ const usersRoutes = require('./routes/users.js');
 const authorsRoutes = require('./routes/authors.js');
 const awardsRoutes = require('./routes/awards.js');
 const catalogsRoutes = require('./routes/catalogs.js');
+const booksRoutes = require('./routes/books.js');
 
 require('dotenv/config');
 
@@ -19,6 +20,7 @@ app.use('/users', usersRoutes);
 app.use('/authors', authorsRoutes);
 app.use('/awards', awardsRoutes);
 app.use('/catalogs', catalogsRoutes);
+app.use('/books', booksRoutes);
 
 //ROUTES
 app.get('/', (req, res) => {
