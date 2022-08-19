@@ -1,8 +1,7 @@
 const User = require('../models/User');
-const { registerValidation, loginValidation } = require('../validation.js');
+const { registerValidation, loginValidation } = require('../validation');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const { encryptPassword, checkIsPasswordValid } = require('../encription');
 
 const getUsers = async (req, res) => {
     try {
@@ -23,8 +22,7 @@ const registerUser = async (req, res) => {
     const emailExists = await User.findOne({ email: userBody.email });
     if (emailExists) return res.status(400).send('Someone already registered with this email!');
 
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(userBody.password, salt);
+    const hashedPassword = await encryptPassword(userBody.password);
 
     const user = new User({
         firstName: userBody.firstName,
@@ -54,7 +52,7 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email: userBody.email });
     if (!user) return res.status(400).send('Wrong email!');
 
-    const isPasswordValid = await bcrypt.compare(userBody.password, user.password);
+    const isPasswordValid = await checkIsPasswordValid(userBody.password, user.password);
     if (!isPasswordValid) return res.status(400).send('Wrong password!');
 
     const token = jwt.sign({ _id: user.id }, process.env.TOKEN_SECRET);
