@@ -5,5 +5,5 @@ const AwardSchema = mongoose.Schema({
     description: String,
     date: Date,
 });
-module.exports.AwardSchema = AwardSchema;
+
 module.exports = mongoose.model('Award', AwardSchema);

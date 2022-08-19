@@ -1,4 +1,4 @@
-const { Award } = require('../models/Award');
+const Award = require('../models/Award');
 
 const getAwards = async(req, res) => {
     try {

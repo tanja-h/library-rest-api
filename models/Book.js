@@ -1,14 +1,21 @@
 const mongoose = require('mongoose');
-const { AuthorSchema } = require('./Author');
-const { AwardSchema } = require('./Award');
+
 
 const BookSchema = mongoose.Schema({
     title: String,
-    author: AuthorSchema,
+    author: {
+        firstName: String,
+        lastName: String,
+        description: String,
+    },
     description: String,
     genre: String,
     edition: Number,
-    award: AwardSchema,
+    award: {
+        title: String,
+        description: String,
+        date: Date,
+    },
 });
 
 module.exports = mongoose.model('Book', BookSchema);
