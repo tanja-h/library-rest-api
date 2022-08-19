@@ -1,6 +1,6 @@
 const Catalog = require('../models/Catalog');
 
-const getCatalogs = async (req, res) => {
+const getCatalogs = async(req, res) => {
     try {
         const catalogs = await Catalog.find();
         res.send(catalogs);
@@ -23,7 +23,7 @@ const createCatalog = (req, res) => {
         });
 }
 
-const getCatalog = async (req, res) => {
+const getCatalog = async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -34,7 +34,7 @@ const getCatalog = async (req, res) => {
     }
 }
 
-const deleteCatalog = async (req, res) => {
+const deleteCatalog = async(req, res) => {
     const { id } = req.params;
 
     try {
@@ -45,7 +45,7 @@ const deleteCatalog = async (req, res) => {
     }
 }
 
-const updateCatalogDescription = async (req, res) => {
+const updateCatalogDescription = async(req, res) => {
     const { id } = req.params;
     const { description } = req.body;
 
@@ -57,4 +57,20 @@ const updateCatalogDescription = async (req, res) => {
     }
 }
 
-module.exports = { getCatalogs, createCatalog, getCatalog, deleteCatalog, updateCatalogDescription }
+const addBookToCatalog = async(req, res) => {
+    const { id } = req.params;
+    console.log("id", id);
+    const { book } = req.body;
+    console.log("book", book);
+
+    try {
+        const catalog = await Catalog.findById(id);
+        catalog.books.push(book);
+        catalog.save(done);
+        res.send(catalog);
+    } catch (error) {
+        res.send(`Error while adding book with id ${id}`);
+    }
+}
+
+module.exports = { getCatalogs, createCatalog, getCatalog, deleteCatalog, updateCatalogDescription, addBookToCatalog }

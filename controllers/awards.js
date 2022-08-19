@@ -13,7 +13,7 @@ const createAward = (req, res) => {
     console.log('body', req.body);
     const award = new Award(req.body);
 
-    console.log(`Trying to save award with name ${user.title} to database!`);
+    console.log(`Trying to save award with name ${award.title} to database!`);
     award.save()
         .then(() => {
             // users.push({ ...user, id: uuidv4() });
@@ -46,7 +46,7 @@ const deleteAward = async(req, res) => {
     }
 }
 
-const updateAwardDes = async(req, res) => {
+const updateAwardDescription = async(req, res) => {
     const { id } = req.params;
     const { description } = req.body;
 
@@ -58,4 +58,4 @@ const updateAwardDes = async(req, res) => {
     }
 }
 
-module.exports = { getAwards, createAward, getAward, deleteAward, updateAwardDes }
+module.exports = { getAwards, createAward, getAward, deleteAward, updateAwardDescription }
